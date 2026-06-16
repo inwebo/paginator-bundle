@@ -1,0 +1,10 @@
+<li {% if false == isActive and false == forceDisplay %}class="hidden-mobile"{% endif %} {% if isActive %}aria-current="true"{% endif %}>
+    {% set route = ('_paginated' in app.current_route) ? app.current_route : app.current_route ~ '_paginated' %}
+    <a
+            href="{{ url(route, {
+                ...app.current_route_parameters,
+                page: page,
+            }) }}" title="{{ title }}">
+        {{ content }}
+    </a>
+</li>

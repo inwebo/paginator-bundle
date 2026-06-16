@@ -1,0 +1,51 @@
+{
+    "name": "inwebo/paginator-bundle",
+    "description": "A lightweight Symfony bundle providing Doctrine-backed pagination with Twig helpers.",
+    "keywords": ["symfony", "bundle", "pagination", "doctrine", "twig"],
+    "homepage": "https://github.com/inwebo/paginator-bundle",
+    "type": "symfony-bundle",
+    "version": "1.0.0",
+    "require": {
+        "php": ">=8.1",
+        "symfony/framework-bundle": "*",
+        "symfony/twig-bundle": "*",
+        "doctrine/orm": "^3.0",
+        "doctrine/doctrine-bundle": "^3.0|^2.7",
+        "twig/twig": "^3.21"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.4",
+        "friendsofphp/php-cs-fixer": "^3.88",
+        "phpstan/phpstan": "^2.1",
+        "symfony/yaml": "*"
+    },
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Inwebo\\PaginatorBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Inwebo\\PaginatorBundle\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "inwebo",
+            "email": "github@inwebo.net"
+        }
+    ],
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "7.*|8.*"
+        }
+    },
+    "minimum-stability": "stable",
+    "scripts": {
+        "php-cs-fixer": "vendor/bin/php-cs-fixer --allow-risky=yes fix",
+        "phpunit": "vendor/bin/phpunit --testdox --colors=always --display-all-issues",
+        "phpstan": "vendor/bin/phpstan analyse src -c phpstan.neon"
+    }
+}

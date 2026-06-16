@@ -1,0 +1,25 @@
+{% if (paginator ?? false) and paginator.countPages > 0 %}
+<ul aria-label="pagination">
+    {% if paginator.currentPage != paginator.countPages %}
+        {{ pagination_page(paginator.countPages, '«', 'Dernière page', false, true) }}
+    {% endif %}
+
+    {% if paginator.currentPage < paginator.countPages %}
+        {{ pagination_page(paginator.currentPage + 1, '‹', 'Page suivante', false, true) }}
+    {% endif %}
+
+    {% set bounds = pagination_bounds(paginator) %}
+
+    {% for i in range(bounds.start, bounds.end) %}
+        {{ pagination_page(i, i, 'Page ' ~ i ~ '/' ~ paginator.countPages, i == paginator.currentPage) }}
+    {% endfor %}
+
+    {% if paginator.currentPage > 1 %}
+        {{ pagination_page(paginator.currentPage - 1, '›', 'Page précédente', false, true) }}
+    {% endif %}
+
+    {% if paginator.currentPage != 1 %}
+        {{ pagination_page(1, '»', 'Première page', false, true) }}
+    {% endif %}
+</ul>
+{% endif %}
