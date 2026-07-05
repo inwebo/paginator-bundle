@@ -34,7 +34,14 @@ abstract class AbstractQueryBuilder extends QueryBuilder
 
     public function paginated(int $pageSize = Paginated::PAGE_SIZE, bool $lastPageFirst = false): Paginated
     {
-        return new Paginated($this, $pageSize, $lastPageFirst);
+        $qb = $this;
+        $countResolver = $lastPageFirst
+            ? static function () use ($qb): int {
+                return (int) (clone $qb)->count()->getQuery()->setCacheable(false)->getSingleScalarResult();
+            }
+        : null;
+
+        return new Paginated($this, $pageSize, $lastPageFirst, $countResolver);
     }
 
     public function orderByCreatedAtDesc(): static

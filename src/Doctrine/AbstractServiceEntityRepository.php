@@ -15,4 +15,5 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 abstract class AbstractServiceEntityRepository extends ServiceEntityRepository
 {
+    use PaginationRepositoryTrait;
 }

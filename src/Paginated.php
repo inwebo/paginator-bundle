@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Inwebo\PaginatorBundle;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use Inwebo\PaginatorBundle\Doctrine\AbstractQueryBuilder;
 
 class Paginated
 {
     final public const int PAGE_SIZE = 30;
     final public const int DISPLAY_PAGES = 11;
 
-    private int $currentPage;
+    private int $currentPage = 1;
     private int $numResults;
     private int $countPages;
 
@@ -22,14 +22,20 @@ class Paginated
      */
     private \Traversable $results;
 
+    /**
+     * @param \Closure(): int|null $countResolver Required when $lastPageFirst is true. Must return the total number of results.
+     */
     public function __construct(
-        private readonly AbstractQueryBuilder $queryBuilder,
+        private readonly QueryBuilder $queryBuilder,
         private readonly int $pageSize = self::PAGE_SIZE,
         private bool $lastPageFirst = false,
+        private readonly ?\Closure $countResolver = null,
     ) {
         if ($this->lastPageFirst) {
-            $qb = clone $this->queryBuilder;
-            $this->countPages = (int) ceil((float) $qb->count()->getQuery()->setCacheable(false)->getSingleScalarResult() / $this->pageSize);
+            if (null === $this->countResolver) {
+                throw new \LogicException('A $countResolver must be provided when $lastPageFirst is true.');
+            }
+            $this->countPages = (int) ceil(($this->countResolver)() / $this->pageSize);
         }
     }
 
