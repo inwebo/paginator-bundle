@@ -142,6 +142,38 @@ Include the built-in template, passing the `Paginated` object as `paginator`:
 
 The template renders a `<ul aria-label="pagination">` with navigation buttons (first, previous, numbered pages, next, last). Navigation buttons are hidden when there is only one page.
 
+### Iterating over results
+
+`Paginated` is not itself iterable — after calling `paginate()`, iterate over `getResults()` to display the current page's items:
+
+```php
+$paginator = $repository->paginate($qb, page: $page);
+
+foreach ($paginator->getResults() as $post) {
+    echo $post->getTitle();
+}
+```
+
+The same works directly in Twig, alongside the pagination navigation template:
+
+```twig
+<ul>
+    {% for post in paginator.results %}
+        <li>{{ post.title }}</li>
+    {% endfor %}
+</ul>
+
+{% include '@InweboPaginator/paginated/pages.html.twig' with { paginator: paginator } %}
+```
+
+Use `getReverseIterator()` instead of `getResults()` to walk the current page back to front (e.g. a chat or activity log where the newest item of the page should appear first):
+
+```twig
+{% for message in paginator.reverseIterator %}
+    <li>{{ message.content }}</li>
+{% endfor %}
+```
+
 #### Route naming convention
 
 The item template builds pagination URLs from the current route. It appends `_paginated` to the route name if not already present. Declare your paginated route accordingly:
@@ -193,3 +225,7 @@ composer php-cs-fixer
 # Static analysis (PHPStan level 10)
 composer phpstan
 ```
+
+## Credits
+
+This bundle extracts and generalizes pagination code originally written by [inwebo](https://github.com/inwebo) for internal projects, packaged here for reuse across applications. Claude (Anthropic) assisted with the extraction, decoupling from the original application code, tests, documentation, and CI/CD setup.

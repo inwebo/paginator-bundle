@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 #[CoversClass(PaginationExtension::class)]
 final class PaginationExtensionTest extends TestCase
@@ -20,7 +21,7 @@ final class PaginationExtensionTest extends TestCase
 
     public function setUp(): void
     {
-        $this->extension = new PaginationExtension($this->createMock(Environment::class));
+        $this->extension = new PaginationExtension(new Environment(new ArrayLoader()));
     }
 
     private function paginated(int $currentPage, int $numResults, int $pageSize = Paginated::PAGE_SIZE): Paginated
